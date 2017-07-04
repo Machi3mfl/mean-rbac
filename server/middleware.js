@@ -1,6 +1,6 @@
 let jwt = require('jwt-simple'),
   moment = require('moment'),
-  config = require('./../../config')
+  config = require('./config')
 
 exports.ensureAuthenticated = function(req, res, next) {
   if(!req.headers.authorization) {

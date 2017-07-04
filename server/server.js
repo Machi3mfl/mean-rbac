@@ -1,149 +1,37 @@
-"use strict"
-// Get dependencies
-const express = require('express');
-const path = require('path');
-const http = require('http');
-const bodyParser = require('body-parser');
+let express = require('express');
+let bodyParser = require('body-parser');
+let mongoose = require('mongoose');
+let cors = require('cors');
+let authCtrl = require('./app/auth/auth');
+let middleware = require('./middleware');
 
-let session = require('express-session')
-let eSession = require('easy-session')
-let cookieParser = require('cookie-parser')
-
-
-// Get our API routes
-const api = require('./routes/api');
-const app = express();
-
-// Parsers for POST data
+// Configuramos Express
+let app = express();
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cors());
+app.set('port', 3000);
 
-// Point static path to dist
-app.use(express.static(path.join(__dirname, 'dist')));
+// Importamos nuestros modelos,
+// en este ejemplo nuestro modelo de usuario
+require('./app/user/user');
 
-// Set our api routes
-app.use('/api', api);
+// Iniciamos las rutas de nuestro servidor/API
+let router = express.Router();
 
-/**
- * Implement sessions ******/
-app.use(cookieParser())
-app.use(session(
-  {
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true
-  }
-))
+// Rutas de autenticación y login
+router.post('/auth/signup', authCtrl.emailSignup);
+router.post('/auth/login', authCtrl.emailLogin);
 
-// Add a path to allow easy login to any role
-app.get('/login/:role', function (req, res, next) {
-  // Going to hardcode the user object
-  let extend = {
-    user: {
-      id: 2
-    }
-  };
-  req.session.login(req.params.role, extend, function () {
-    res.redirect('/');
+// Ruta solo accesible si estás autenticado
+router.get('/private', middleware.ensureAuthenticated, function(req, res) {
+
+});
+
+// Iniciamos el servidor y la base de datos
+mongoose.connect('mongodb://localhost', function(err) {
+  // Comprobar errores siempre
+  app.listen(app.get('port'), function(){
+    console.log('Express corriendo en http://localhost:3000');
   });
 });
-
-// A path to destroy our session
-app.get('/logout', function (req, res, next) {
-  req.session.logout(function () {
-    res.redirect('/');
-  });
-});
-
-app.get('/', function (req, res, next){
-  res.send('Current role is ' + JSON.stringify(req.session.getRole()));
-});
-
-// We need no authentication here
-app.get('/blog', function (req, res, next) {
-  res.send('Cool blog post');
-});
-
-app.get('/blog/create', function (req, res, next) {
-  // Check if user has access
-  req.session.can('blog:create')
-    .then(function () {
-      res.send('Blog edit');
-    })
-    .catch(function () {
-      res.sendStatus(403);
-    });
-});
-
-let $q = require('q');
-function findBlog(id) {
-  return $q({
-    ownerId: parseInt(id)
-  });
-}
-
-app.get('/blog/edit/:id', function (req, res, next) {
-  // look for blog
-  findBlog(req.params.id)
-    .then(function (blog) {
-      //check for access
-      return req.session.can('blog:edit', {user: req.session.user, blog: blog});
-    }, function (err) {
-      // Handling db errors
-      res.sendStatus(500);
-    })
-    .then(function () {
-      // we have access so edit
-      res.send('Editing blog');
-    }, function (err) {
-      // Handling auth errors
-      res.sendStatus(403);
-    });
-});
-
-app.use(eSession.main(session, {
-  rbac: {
-    guest: {
-      can: ['blog:read']
-    },
-    writer: {
-      can: ['blog:create', {
-        name: 'blog:edit',
-        when: function (params, cb) {
-          //check if user is the owner
-          setImmediate(cb, null, params.user.id === params.blog.ownerId);
-        }
-      }],
-      inherits: ['guest']
-    }
-  }
-}));
-
-/****
- ****** ROUTES : Catch all other routes and return the index file ***/
-/*app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
-});*/
-
-
-
-/**
- * Get port from environment and store in Express. ****/
-const port = process.env.PORT || '3000';
-app.set('port', port);
-
-
-/**
- * Create HTTP server. ****/
-const server = http.createServer(app);
-
-
-
-/**
- * Listen on provided port, on all network interfaces. ****/
-server.listen(port, function(err) {
-  if(err){
-    return console.log('something bad wrong',err)
-  }
-  console.log('API running on localhost:' + port);
-  });
