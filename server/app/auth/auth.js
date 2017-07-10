@@ -17,7 +17,7 @@ exports.emailSignup = function(req,res){
 }
 
 exports.emailLogin = function(req,res){
-  User.findOne({ email: req.body.email.toLowerCase() }, function(err,user){
+  User.findOne({ name: req.body.name.toLowerCase() }, function(err,user){
     return res
       .status(200)
       .send({ token: service.createToken(user) })
