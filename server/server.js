@@ -34,13 +34,14 @@ let router = express.Router();
 app.post('/auth/signup', authCtrl.emailSignup);
 app.post('/auth/login', authCtrl.emailLogin);
 
+
 // Ruta solo accesible si estás autenticado
 app.get('/private', middleware.ensureAuthenticated, function(req, res) {
 
 });
 
 // Iniciamos el servidor y la base de datos
-mongoose.connect('mongodb://localhost', { useMongoClient: true },
+mongoose.connect('mongodb://localhost/rbac', { useMongoClient: true },
   function(err) {
     // Comprobar errores siempre
     app.listen(app.get('port'), function(){

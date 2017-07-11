@@ -2,8 +2,10 @@ let mongoose     = require('mongoose');
 let Schema       = mongoose.Schema;
 
 let UserSchema   = new Schema({
-  name: String,
+  username: String,
   password: String,
+  lastName: String,
+  firstName: String,
   admin: Boolean
 });
 
