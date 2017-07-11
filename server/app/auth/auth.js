@@ -6,23 +6,15 @@ let mongoose = require('mongoose'),
 //User = mongoose.model('User'), aprender como usarlo asi
 
 exports.emailSignup = function(req,res){
-  let userParam = new User({
+  let user = new User({
     username: req.body.username,
-    password: req.body.password,
+    password: bcrypt.hashSync(req.body.password,10),
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     admin: req.body.admin
   })
-
-  /*console.log('user',user)
-  user.save(function(err){
-    return res
-      .status(200)
-      .send({ token: service.createToken(user) })
-  })*/
-
   // validation
-  User.findOne({ username: userParam.username },
+  User.findOne({ username: user.username },
     function (err, user) {
       if (err)
         return res.status(400).send(err.name + ': ' + err.message);
@@ -36,13 +28,6 @@ exports.emailSignup = function(req,res){
     });
 
   function createUser() {
-    // set user object to userParam without the cleartext password
-    let user = _.omit(userParam, 'password');
-
-    // add hashed password to user object
-    user.password = bcrypt.hashSync(userParam.password, 10);
-
-      console.log('user',user)
     user.save(function (err) {
         if (err)
           return res.status(400).send(err.name + ': ' + err.message);
@@ -57,8 +42,7 @@ exports.emailLogin = function(req,res){
   User.findOne({ username: req.body.username.toLocaleLowerCase() }, function (err, user) {
     if (err)
       return res.status(400).send(err.name + ': ' + err.message);
-
-    if (user && bcrypt.compareSync(req.body.password, user.hash)) {
+    if (user && bcrypt.compareSync(req.body.password, user.password)) {
       // authentication successful
       return res
         .status(200)
