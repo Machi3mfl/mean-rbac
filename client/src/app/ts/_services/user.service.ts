@@ -8,7 +8,9 @@ export class UserService {
     constructor(private http: Http) { }
 
     getAll() {
-        return this.http.get('/users').map((response: Response) => response.json());
+        return this.http.get('/users').map(
+          (response: Response) => response.json()
+        );
     }
 
     getById(_id: string) {

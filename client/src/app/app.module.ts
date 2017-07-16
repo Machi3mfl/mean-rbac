@@ -13,6 +13,7 @@ import { AlertService, AuthenticationService, UserService } from './ts/_services
 import { HomeComponent } from './ts/_components/home/home.component';
 import { LoginComponent } from './ts/_components/login/login.component';
 import { RegisterComponent } from './ts/_components/register/register.component';
+import { AdminComponent } from './ts/_components/admin/admin.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { RegisterComponent } from './ts/_components/register/register.component'
     AlertComponent,
     HomeComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    AdminComponent,
   ],
   providers: [
     customHttpProvider,

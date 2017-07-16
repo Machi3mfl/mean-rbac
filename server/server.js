@@ -29,6 +29,9 @@ app.use(logger('dev'))
 // Iniciamos las rutas de nuestro servidor/API
 let router = express.Router();
 //despues crear router
+app.use('/users', require('./app/user/users.controllers'))
+
+
 
 // Rutas de autenticación y login
 app.post('/auth/signup', authCtrl.emailSignup);

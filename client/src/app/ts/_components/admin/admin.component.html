@@ -1,0 +1,25 @@
+<div class="container-fluid">
+    <div class="row">
+        <table class="table">
+          <thead>
+          <tr>
+            <th> User </th>
+            <th> Name </th>
+            <th> Last Name </th>
+            <th> Role </th>
+            <th> Actions </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{user.username}}</td>
+            <td>{{user.firstName}}</td>
+            <td>{{user.lastName}}</td>
+            <td></td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
+    </div>
+</div>
+
