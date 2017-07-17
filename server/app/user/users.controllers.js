@@ -17,7 +17,7 @@ async function getAll(req,res){
     let user = await userService.getAll()
     res.send(user)
   }catch (err){
-   res.send(err)
+    res.status(400).send(err)
   }
 }
 
@@ -29,6 +29,12 @@ function update(){
 
 }
 
-function remove(){
-
+async function remove(req,res){
+  console.log('params',req.params)
+  try{
+    let user = await userService.remove(req.params._id)
+    res.sendStatus(200)
+  }catch (err){
+    res.status(400).send(err)
+  }
 }

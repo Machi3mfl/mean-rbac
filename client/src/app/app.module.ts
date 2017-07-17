@@ -14,6 +14,7 @@ import { HomeComponent } from './ts/_components/home/home.component';
 import { LoginComponent } from './ts/_components/login/login.component';
 import { RegisterComponent } from './ts/_components/register/register.component';
 import { AdminComponent } from './ts/_components/admin/admin.component';
+import { NavbarComponent } from './ts/_components/navbar/navbar.component';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { AdminComponent } from './ts/_components/admin/admin.component';
     LoginComponent,
     RegisterComponent,
     AdminComponent,
+    NavbarComponent,
   ],
   providers: [
     customHttpProvider,

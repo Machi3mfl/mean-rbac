@@ -25,7 +25,7 @@ export class UserService {
         return this.http.put('/users/' + user._id, user);
     }
 
-    delete(_id: string) {
+    remove(_id: string) {
         return this.http.delete('/users/' + _id);
     }
 }

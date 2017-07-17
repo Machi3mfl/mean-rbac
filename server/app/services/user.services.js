@@ -18,4 +18,8 @@ async function getAll(){
 
 function getCurrent(){}
 function update(){}
-function remove(){}
+function remove(_id){
+  User.remove({ _id: _id }, function(err,user){
+    console.log('user',user)
+  })
+}

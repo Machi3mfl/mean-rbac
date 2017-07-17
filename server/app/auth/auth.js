@@ -44,9 +44,17 @@ exports.emailLogin = function(req,res){
       return res.status(400).send(err.name + ': ' + err.message);
     if (user && bcrypt.compareSync(req.body.password, user.password)) {
       // authentication successful
+      let userData = {
+        _id: user._id,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        token: service.createToken(user)
+      }
+
       return res
         .status(200)
-        .send({ token: service.createToken(user) })
+        .send(userData)
     } else {
       // authentication failed
       return res.status(400).send('Username or password is incorrect');
