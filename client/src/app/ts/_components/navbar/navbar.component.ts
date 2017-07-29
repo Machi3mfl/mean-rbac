@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {current} from "codelyzer/util/syntaxKind";
 
 @Component({
   selector: 'navbar',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    console.log('current',currentUser.firstName)
+  }
 
   ngOnInit() {
+
   }
 
 }

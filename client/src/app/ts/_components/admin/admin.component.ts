@@ -21,7 +21,6 @@ export class AdminComponent implements OnInit {
   }
 
   private loadAllUsers() {
-    console.log('current',this.currentUser)
     this.userService.getAll().subscribe(
       users => { this.users = users; });
   }
@@ -29,7 +28,6 @@ export class AdminComponent implements OnInit {
   private removeUser(_id: string){
     this.userService.remove(_id).subscribe(
       data => {
-        console.log('remove data',data)
         this.alertService.success('User Removed Succesfully',true)
         this.loadAllUsers()
       },

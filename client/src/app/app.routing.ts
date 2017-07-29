@@ -8,10 +8,10 @@ import { AdminComponent } from './ts/_components/admin/admin.component';
 
 const appRoutes: Routes = [
     /*{ path: '', component: HomeComponent, canActivate: [AuthGuard] },*/
-    { path: '', component: HomeComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
-    { path: 'admin', component: AdminComponent },
+    { path: '', component: HomeComponent, canActivate: [AuthGuard]  },
+    { path: 'login', component: LoginComponent},
+    { path: 'register', component: RegisterComponent},
+    { path: 'admin', component: AdminComponent , canActivate: [AuthGuard] },
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
