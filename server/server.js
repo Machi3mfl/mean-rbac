@@ -42,7 +42,7 @@ let express = require('express'),
   app.use('/allow/:user/:role', AclCtrl.setRole)
   app.use('/disallow/:user/:role', AclCtrl.unsetRole)
 
-  let dbURI = 'mongodb://localhost/ConnectionTest';
+  let dbURI = 'mongodb://localhost/rbac';
 
 // Connecting to our mongo database
   mongoose.connect( dbURI, { useMongoClient: true },
