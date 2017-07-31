@@ -1,28 +1,21 @@
 'use strict';
 
-let roles = {
-  admin: {
-    can: ['rule the world'],
-    inherits: ['manager']
-  },
-  manager: {
-    can: ['post:save', 'post:delete'],
-    inherits: ['user']
-  },
-  user: {
-    can: ['account:add', 'account:save', 'account:delete', 'post:add', {
-      name: 'post:save',
-      when: function (params, callback) {
-        setImmediate(callback, null, params.ownerId === params.postId);
-      }},
-      {
-        name: 'post:create',
-        when: function (params, callback) {
-          setImmediate(callback, null, params.ownerId === params.userId);
-        }
-      }
+let roles = [
+  {
+    roles: 'admin',
+    allows: [
+      { resources: '/secret', permissions: 'create' },
+      { resources: '/topsecret', permissions: '*' }
     ]
+  }, {
+    roles: 'user',
+    allows: [
+      { resources: '/secret', permissions: 'get' }
+    ]
+  }, {
+    roles: 'guest',
+    allows: []
   }
-};
+]
 
-module.exports.all = roles;
+module.exports = roles;
