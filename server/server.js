@@ -30,8 +30,8 @@ let express = require('express'),
   app.use('/users', require('./app/user/users.controllers'))
 
   // Rutas de autenticación y login
-  app.post('/auth/signup', authCtrl.emailSignup);
-  app.post('/auth/login', authCtrl.emailLogin);
+  app.post('/auth/signup', authCtrl.signin);
+  app.post('/auth/login', authCtrl.login);
 
   // Ruta solo accesible si estás autenticado
   app.get('/admin', middleware.ensureAuthenticated, function(req, res) {

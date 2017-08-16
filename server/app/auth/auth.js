@@ -5,7 +5,7 @@ let mongoose = require('mongoose'),
     _ = require('lodash')
 //User = mongoose.model('User'), aprender como usarlo asi
 
-exports.emailSignup = function(req,res){
+exports.signin = function(req,res){
   let user = new User({
     username: req.body.username,
     password: bcrypt.hashSync(req.body.password,10),
@@ -38,12 +38,16 @@ exports.emailSignup = function(req,res){
   }
 }
 
-exports.emailLogin = function(req,res){
+exports.login = function(req,res){
   User.findOne({ username: req.body.username.toLocaleLowerCase() }, function (err, user) {
-    if (err)
+    if (err){
+      console.log('err', err);
       return res.status(400).send(err.name + ': ' + err.message);
+    }
+
     if (user && bcrypt.compareSync(req.body.password, user.password)) {
       // authentication successful
+
       let userData = {
         _id: user._id,
         username: user.username,
@@ -52,6 +56,7 @@ exports.emailLogin = function(req,res){
         token: service.createToken(user)
       }
 
+      console.log('res', res,userData);
       return res
         .status(200)
         .send(userData)

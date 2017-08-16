@@ -8,8 +8,8 @@ exports.mongoConnect = function ( error, db ) {
 
   let mongoBackend = new node_acl.mongodbBackend( db, mongo_prefix );
 
-// Create a new access control list by providing the mongo backend
-//  Also inject a simple logger to provide meaningful output
+  // Create a new access control list by providing the mongo backend
+  //  Also inject a simple logger to provide meaningful output
   acl = new node_acl(mongoBackend);
 
   // Defining roles and routes
