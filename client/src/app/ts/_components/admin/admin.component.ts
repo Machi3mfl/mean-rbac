@@ -22,7 +22,9 @@ export class AdminComponent implements OnInit {
 
   private loadAllUsers() {
     this.userService.getAll().subscribe(
-      users => { this.users = users; });
+      users => { this.users = users; },
+      error => { console.log('error', error) }
+    );
   }
 
   private removeUser(_id: string){

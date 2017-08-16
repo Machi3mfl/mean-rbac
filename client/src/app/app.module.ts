@@ -15,6 +15,7 @@ import { LoginComponent } from './ts/_components/login/login.component';
 import { RegisterComponent } from './ts/_components/register/register.component';
 import { AdminComponent } from './ts/_components/admin/admin.component';
 import { NavbarComponent } from './ts/_components/navbar/navbar.component';
+import { RbacComponent } from './ts/_components/rbac/rbac.component';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { NavbarComponent } from './ts/_components/navbar/navbar.component';
     RegisterComponent,
     AdminComponent,
     NavbarComponent,
+    RbacComponent,
   ],
   providers: [
     customHttpProvider,
