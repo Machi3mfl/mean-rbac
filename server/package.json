@@ -23,6 +23,7 @@
     "morgan": "^1.8.2"
   },
   "dependencies": {
+    "acl": "^0.4.10",
     "bcryptjs": "^2.4.3"
   }
 }

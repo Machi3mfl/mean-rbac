@@ -8,13 +8,11 @@ let express = require('express'),
     AclCtrl = require('./app/acl/acl');
     mongoose.Promise = global.Promise;
 
-  // Importamos nuestros modelos (Usuario)
-  require('./app/user/user');
+//configurar acl
+let acl = require('./app/rbac/rbac');
 
-  // Configuramos Express
-  let app = express();
-
-  app.use(cors());
+// Configuramos Express
+app.use(cors());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(logger('dev'))  // logger morgan
@@ -24,23 +22,29 @@ let express = require('express'),
     response.send( error.msg, error.errorCode );
   });
 
+//app.use(logger);
+app.set('port', 3000);
+
+  
+
   // Iniciamos las rutas de nuestro servidor/API
   //let router = express.Router();
   //despues crear router
   app.use('/users', require('./app/user/users.controllers'))
 
-  // Rutas de autenticación y login
-  app.post('/auth/signup', authCtrl.signin);
-  app.post('/auth/login', authCtrl.login);
+// Importamos nuestros modelos,
+// en este ejemplo nuestro modelo de usuario
+require('./app/user/user');
 
-  // Ruta solo accesible si estás autenticado
-  app.get('/admin', middleware.ensureAuthenticated, function(req, res) {
-  });
+// logger morgan
+app.use(logger('dev'))
 
   //acl routes
   app.use('/info',AclCtrl.info)
   app.use('/allow/:user/:role', AclCtrl.setRole)
   app.use('/disallow/:user/:role', AclCtrl.unsetRole)
+
+  app.use('/rbac', require('./app/rbac/rbac.controllers'));
 
   let dbURI = 'mongodb://localhost/rbac';
 
