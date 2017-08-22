@@ -55,8 +55,7 @@ exports.login = function(req,res){
         lastName: user.lastName,
         token: service.createToken(user)
       }
-
-      console.log('res', res,userData);
+      console.log('res', userData);
       return res
         .status(200)
         .send(userData)

@@ -5,14 +5,15 @@ let express = require('express'),
     logger = require('morgan'),
     authCtrl = require('./app/auth/auth'),
     middleware = require('./middleware'),
-    AclCtrl = require('./app/acl/acl');
-    mongoose.Promise = global.Promise;
+    AclCtrl = require('./app/acl/acl.controllers');
+
 
 //configurar acl
-let acl = require('./app/rbac/rbac');
+let acl = require('./app/acl/acl');
 
 // Configuramos Express
-app.use(cors());
+  let app = express();
+  app.use(cors());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(logger('dev'))  // logger morgan
@@ -22,29 +23,23 @@ app.use(cors());
     response.send( error.msg, error.errorCode );
   });
 
-//app.use(logger);
-app.set('port', 3000);
+  //app.use(logger);
+  app.set('port', 3000);
 
-  
+  // Rutas de autenticación y login
+  app.post('/auth/signup', authCtrl.signin);
+  app.post('/auth/login', authCtrl.login);
 
-  // Iniciamos las rutas de nuestro servidor/API
-  //let router = express.Router();
-  //despues crear router
+  // Importamos nuestros modelos,
+  // en este ejemplo nuestro modelo de usuario
   app.use('/users', require('./app/user/users.controllers'))
-
-// Importamos nuestros modelos,
-// en este ejemplo nuestro modelo de usuario
-require('./app/user/user');
+  //app.use('/acl', require('./app/user/acl.controllers'))
 
 // logger morgan
-app.use(logger('dev'))
+  app.use(logger('dev'))
 
-  //acl routes
-  app.use('/info',AclCtrl.info)
-  app.use('/allow/:user/:role', AclCtrl.setRole)
-  app.use('/disallow/:user/:role', AclCtrl.unsetRole)
-
-  app.use('/rbac', require('./app/rbac/rbac.controllers'));
+//acl routes
+  app.use('/acl', AclCtrl);
 
   let dbURI = 'mongodb://localhost/rbac';
 
@@ -61,7 +56,9 @@ app.use(logger('dev'))
 
 
   mongoose.connection.on('connected',function(){
-    AclCtrl.mongoConnect(null,mongoose.connection.db)
+    let instance = acl.initAcl(mongoose.connection.db,'acl_');
+    if (instance)
+      app.locals.acl = instance;
     console.log('Mongoose default connection open to ' + dbURI);
   });
 

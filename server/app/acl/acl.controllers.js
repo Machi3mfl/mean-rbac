@@ -1,10 +1,17 @@
-"use strict";
+let express = require('express'),
+    router = express.Router(),
+    acl = require('acl'),
+    aclService = require('../services/acl.services');
 
-let express = require('express');
-let router = express.Router();
+/**
+ set routes of ACL
+ **/
 
-// crear servicio para rbac
+router.get('/info', aclService.info);
+router.post('/allow/:user/:role', aclService.setRole);
+router.post('/disallow/:user/:role', aclService.unsetRole);
 
+router.get('/roles/', aclService.listRoles);
 
 router.get('/',getAll);
 router.get('/:id',getRole);
@@ -31,7 +38,7 @@ async function getRole(req, res){
     });
   }
   catch(err) {
-   res.send('err',err);
+    res.send('err',err);
   }
 }
 
@@ -56,3 +63,7 @@ async function deleteRole(req, res){
     res.send('err',err);
   }
 }
+
+
+
+

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RbacService } from '../../_services/rbac.service';
+import { RbacService, AlertService } from '../../_services/index';
 
 @Component({
   selector: 'rbac',
@@ -8,7 +8,12 @@ import { RbacService } from '../../_services/rbac.service';
   providers: [RbacService]
 })
 export class RbacComponent implements OnInit {
-  constructor( private rbacService: RbacService) {
+
+  roles;
+  hasRoles: boolean = false;
+
+  constructor( private rbacService: RbacService,
+               private alertService: AlertService ) {
     //this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
@@ -16,11 +21,30 @@ export class RbacComponent implements OnInit {
     this.loadAllRoles();
   }
 
-  loadAllRoles(){
+  private loadAllRoles(){
     this.rbacService.getAll().subscribe(
-      roles => { console.log('respuesta rbac',roles) },
+      roles => {
+        if (roles){
+          this.roles = roles;
+          this.hasRoles = true;
+        }
+        else{
+          this.hasRoles = false;
+        }
+      },
       error => { console.log('error', error) }
     )
+  }
+
+  private removeRole(_id: string){
+    this.rbacService.remove(_id).subscribe(
+      data => {
+        this.alertService.success('Role Removed Succesfully', true)
+        this.loadAllRoles()
+      },
+      error =>{
+
+      })
   }
 
 }
