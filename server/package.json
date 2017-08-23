@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "acl": "^0.4.10",
-    "bcryptjs": "^2.4.3"
+    "bcryptjs": "^2.4.3",
+    "express-list-endpoints": "^3.0.0"
   }
 }

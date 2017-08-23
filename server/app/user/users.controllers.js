@@ -30,7 +30,6 @@ function update(){
 }
 
 async function remove(req,res){
-  console.log('params',req.params)
   try{
     let user = await userService.remove(req.params._id)
     res.sendStatus(200)

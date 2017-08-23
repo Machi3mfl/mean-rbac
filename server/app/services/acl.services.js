@@ -11,8 +11,7 @@ function getAclInstance(req){
 }
 
 async function listRoles(req, res, next){
-  let roles = await Role.find({}).select({ key: 1 });
-  res.json(roles);
+  return await Role.find({}).select({ key: 1 });
 }
 
 // Defining routes ( resources )
